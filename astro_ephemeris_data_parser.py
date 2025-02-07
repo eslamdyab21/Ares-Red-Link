@@ -6,8 +6,8 @@ import os
 import re
 
 
-def request_data(astro_object, file_name):
-    url = f"https://astropixels.com/ephemeris/{astro_object}/{file_name}.html"
+def request_data(astro_object_type, file_name):
+    url = f"https://astropixels.com/ephemeris/{astro_object_type}/{file_name}.html"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
@@ -65,9 +65,11 @@ if __name__ == "__main__":
 
     base_dir = 'source-data'
 
-    astro_object = sys.argv[1]
-    file_name = sys.argv[2]
+    astro_object_type = sys.argv[1]
+    astro_object_name = sys.argv[2]
+    year = sys.argv[3]
+    file_name = astro_object_name + year
 
-    html_text = request_data(astro_object, file_name)
+    html_text = request_data(astro_object_type, file_name)
     csv_headers, csv_data = extract_data(html_text)
     save_csv(csv_headers, csv_data, base_dir, file_name)
