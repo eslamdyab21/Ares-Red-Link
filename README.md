@@ -1,7 +1,7 @@
 # Ares-Red-Link
 
 # Data Source 
-![](astropixels_website.png)
+![](images/astropixels_website.png)
 
 We use the ephemeris data available in the  `astropixels` website, this website has recorded historical data for planets in our solar system from 2011.
 
