@@ -1,6 +1,7 @@
 import requests
 import logging
 import csv
+import sys
 import os
 import re
 
@@ -62,9 +63,10 @@ def save_csv(csv_headers, csv_data, base_dir, file_name):
 if __name__ == "__main__":
     logging.basicConfig(level = "INFO")
 
-    astro_object = 'sun'
-    file_name = 'sun2020'
     base_dir = 'source-data'
+
+    astro_object = sys.argv[1]
+    file_name = sys.argv[2]
 
     html_text = request_data(astro_object, file_name)
     csv_headers, csv_data = extract_data(html_text)
