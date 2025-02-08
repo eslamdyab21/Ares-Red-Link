@@ -21,14 +21,19 @@ def request_data(astro_object_type, file_name):
 
 
 
-def extract_data(html_text):
+def extract_data(html_text, astro_object_type):
     pre_matches = re.findall(r"<pre>(.*?)</pre>", html_text, re.DOTALL)
 
     table_text = "\n".join(pre_matches).strip()
     lines = table_text.split("\n")
 
-    csv_headers = ['Date', 'JD', 'App GST', 'Equation of Time', 'Apparent R.A', 'Apparent Declination'
-                'Distance a.u', 'Ang.Diam', 'Hel.Long', 'Hel.Lat', 'P.A.Axis'] 
+    if astro_object_type == 'sun':
+        csv_headers = ['Date', 'JD', 'App GST', 'Equation of Time', 'Apparent R.A', 'Apparent Declination'
+                    'Distance a.u', 'Ang.Diam', 'Hel.Long', 'Hel.Lat', 'P.A.Axis'] 
+    else:
+        csv_headers = ['Date', 'Apparent R.A', 'Apparent Declination', 'Distance to Earth', 'Distance to Sun', 'App.Mag'
+                    'Ang.Diam', 'Phase Illum', 'Phase Angle', 'S.E.Long', 'S.E.Lat', 'P.A.Axis', 'Ls', 'Solar Elong'] 
+        
     csv_data = []
 
 
@@ -71,5 +76,5 @@ if __name__ == "__main__":
     file_name = astro_object_name + year
 
     html_text = request_data(astro_object_type, file_name)
-    csv_headers, csv_data = extract_data(html_text)
+    csv_headers, csv_data = extract_data(html_text, astro_object_type)
     save_csv(csv_headers, csv_data, base_dir, file_name)
