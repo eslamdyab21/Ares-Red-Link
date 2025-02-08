@@ -4,6 +4,8 @@
 
 constexpr double DEG_TO_RAD = M_PI / 180.0;
 constexpr double SOLAR_CONJUNCTION_ANGLE = 5.0; // Threshold in degrees
+constexpr double SPEED_OF_LIGHT = 299792.458; // km/s
+constexpr double AU_TO_KM = 149597870.7; // km
 
 // Function to convert RA/Dec to 3D Cartesian coordinates (unit vector)
 std::array<double, 3> toCartesian(double ra, double dec) {
@@ -42,6 +44,6 @@ double CommsManager::computeSignalDelay(const EphemerisEntry mars_ephemeris_entr
         return -1.0; // Signal blocked
     }
 
-    double distance_km = mars_ephemeris_entry.distance_au * 149597870.7; // Convert AU to km
-    return distance_km / 299792.458; // Light travel time in seconds
+    double distance_km = mars_ephemeris_entry.distance_au * AU_TO_KM; // Convert AU to km
+    return distance_km / SPEED_OF_LIGHT; // Light travel time in seconds
 }
