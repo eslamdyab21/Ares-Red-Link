@@ -28,7 +28,7 @@ def extract_data(html_text, astro_object_type):
     lines = table_text.split("\n")
 
     if astro_object_type == 'sun':
-        csv_headers = ['Date', 'JD', 'App GST', 'Equation of Time', 'Apparent R.A', 'Apparent Declination'
+        csv_headers = ['Date', 'JD', 'App GST', 'Equation of Time', 'Apparent R.A', 'Apparent Declination',
                     'Distance a.u', 'Ang.Diam', 'Hel.Long', 'Hel.Lat', 'P.A.Axis'] 
     else:
         csv_headers = ['Date', 'Apparent R.A', 'Apparent Declination', 'Distance to Earth', 'Distance to Sun', 'App.Mag'
