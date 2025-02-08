@@ -16,11 +16,14 @@ struct EphemerisEntry {
 
 class EphemerisData {
 public:
-    void loadEphemeris(const std::string& astro_object_ephemeris);
-    const std::vector<EphemerisEntry>& getEphemerisData() const;
+    void loadSunEphemeris(const std::string& astro_object_ephemeris);
+    void loadMarsEphemeris(const std::string& astro_object_ephemeris);
+    const std::vector<EphemerisEntry>& getSunEphemerisData() const;
+    const std::vector<EphemerisEntry>& getMarsEphemerisData() const;
 
 private:
-    std::vector<EphemerisEntry> astro_object_ephemeris;
+    std::vector<EphemerisEntry> sun_ephemeris_data;
+    std::vector<EphemerisEntry> mars_ephemeris_data;
 };
 
 #endif // EPHEMERIS_DATA_H
