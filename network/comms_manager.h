@@ -10,7 +10,8 @@ class CommsManager {
 public:
     double computeSignalDelay(const EphemerisEntry mars_ephemeris_entry, const EphemerisEntry sun_ephemeris_entry);
     void delayedTransmitter(const std::string& ip, int port);
-
+    std::string getCurrentDate();
+    
 private:
     EphemerisData ephemeris;
     bool isSolarConjunction(const EphemerisEntry mars_ephemeris_entry, const EphemerisEntry sun_ephemeris_entry);
