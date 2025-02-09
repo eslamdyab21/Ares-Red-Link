@@ -3,15 +3,17 @@
 #include <vector>
 
 #include "../ephemeris/ephemeris_data.h"
+#include "../mars-rover/rover.h"
 
 
 class CommsManager {
 public:
     double computeSignalDelay(const EphemerisEntry mars_ephemeris_entry, const EphemerisEntry sun_ephemeris_entry);
-    bool isSolarConjunction(const EphemerisEntry mars_ephemeris_entry, const EphemerisEntry sun_ephemeris_entry);
+    void delayedTransmitter(const std::string& ip, int port);
 
 private:
     EphemerisData ephemeris;
+    bool isSolarConjunction(const EphemerisEntry mars_ephemeris_entry, const EphemerisEntry sun_ephemeris_entry);
 };
 
 #endif // COMMS_MANAGER_H
