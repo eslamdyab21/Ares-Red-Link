@@ -95,3 +95,18 @@ void CommsManager::delayedTransmitter(const std::string& ip, int port) {
 
     close(sock);
 }
+
+
+
+// Get the current time
+std::string CommsManager::getCurrentDate() {
+    std::time_t t = std::time(nullptr);
+    std::tm* tm = std::localtime(&t);
+
+
+    char buffer[10];
+    std::strftime(buffer, sizeof(buffer), "%b %d", tm);
+
+
+    return std::string(buffer);
+}
