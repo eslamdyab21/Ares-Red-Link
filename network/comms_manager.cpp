@@ -1,6 +1,14 @@
-#include "comms_manager.h"
 #include <cmath>
 #include <array>
+#include <chrono>
+#include <cstring>
+#include <arpa/inet.h>
+#include <queue>
+#include <unistd.h>
+
+#include "comms_manager.h"
+
+
 
 constexpr double DEG_TO_RAD = M_PI / 180.0;
 constexpr double SOLAR_CONJUNCTION_ANGLE = 5.0; // Threshold in degrees
@@ -37,6 +45,8 @@ bool CommsManager::isSolarConjunction(const EphemerisEntry mars_ephemeris_entry,
     return angle_deg < SOLAR_CONJUNCTION_ANGLE;
 }
 
+
+
 // Compute signal delay Earth-Mars, with conjunction check
 double CommsManager::computeSignalDelay(const EphemerisEntry mars_ephemeris_entry, const EphemerisEntry sun_ephemeris_entry) {
     if (isSolarConjunction(mars_ephemeris_entry, sun_ephemeris_entry)) {
@@ -46,4 +56,42 @@ double CommsManager::computeSignalDelay(const EphemerisEntry mars_ephemeris_entr
 
     double distance_km = mars_ephemeris_entry.distance_au * AU_TO_KM; // Convert AU to km
     return distance_km / SPEED_OF_LIGHT; // Light travel time in seconds
+}
+
+
+
+// UDP thread to send sensors data
+void CommsManager::delayedTransmitter(const std::string& ip, int port) {
+    int sock = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sock < 0) {
+        std::cerr << "Socket creation failed\n";
+        return;
+    }
+
+    sockaddr_in serverAddr{};
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(port);
+    inet_pton(AF_INET, ip.c_str(), &serverAddr.sin_addr);
+
+    while (true) {
+        std::unique_lock<std::mutex> lock(queueMutex);
+        queueCond.wait(lock, [] { return !sensorsDataQueue.empty(); });
+
+        if (!sensorsDataQueue.empty()) {
+            DataPacket packet = sensorsDataQueue.front();
+            auto now = std::chrono::steady_clock::now();
+
+            if (now >= packet.sendTime) {
+                sensorsDataQueue.pop();
+                lock.unlock();
+
+                sendto(sock, packet.data.c_str(), packet.data.size(), 0, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+                lock.lock();
+            } else {
+                queueCond.wait_until(lock, packet.sendTime);
+            }
+        }
+    }
+
+    close(sock);
 }
