@@ -8,10 +8,10 @@
 #include <iostream>
 
 struct EphemerisEntry {
-    std::string date;
-    double distance_au;  
-    double ra;           // Right Ascension
-    double declination;  
+    std::string date = "Jan 01";
+    double distance_au = 0;  
+    double ra = 0;           // Right Ascension
+    double declination = 0;  
 };
 
 class EphemerisData {
@@ -20,6 +20,9 @@ public:
     void loadMarsEphemeris(const std::string& astro_object_ephemeris);
     const std::vector<EphemerisEntry>& getSunEphemerisData() const;
     const std::vector<EphemerisEntry>& getMarsEphemerisData() const;
+    EphemerisEntry getSunEphemerisDataDate(const std::string& astro_object_filename, std::string date);
+    EphemerisEntry getMarsEphemerisDataDate(const std::string& astro_object_filename, std::string date);
+
 
 private:
     std::vector<EphemerisEntry> sun_ephemeris_data;
