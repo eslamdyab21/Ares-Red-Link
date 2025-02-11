@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 #include "comms_manager.h"
-
+#include "../logger/logger.h"
 
 
 constexpr double DEG_TO_RAD = M_PI / 180.0;
@@ -17,6 +17,8 @@ constexpr double AU_TO_KM = 149597870.7; // km
 
 // Function to convert RA/Dec to 3D Cartesian coordinates (unit vector)
 std::array<double, 3> toCartesian(double ra, double dec) {
+    logMessage("INFO", "CommsManager::toCartesian");
+
     double ra_rad = ra * 15.0 * DEG_TO_RAD;  // Convert decimal hours to degrees, then to radians
     double dec_rad = dec * DEG_TO_RAD;       // Convert Dec to radians
 
@@ -30,6 +32,8 @@ std::array<double, 3> toCartesian(double ra, double dec) {
 
 // Check for conjunction
 bool CommsManager::isSolarConjunction(const EphemerisEntry mars_ephemeris_entry, const EphemerisEntry sun_ephemeris_entry) {
+    logMessage("INFO", "CommsManager::isSolarConjunction");
+
     auto mars_vector = toCartesian(mars_ephemeris_entry.ra, mars_ephemeris_entry.declination);
     auto sun_vector = toCartesian(sun_ephemeris_entry.ra, sun_ephemeris_entry.declination);
 
@@ -49,8 +53,11 @@ bool CommsManager::isSolarConjunction(const EphemerisEntry mars_ephemeris_entry,
 
 // Compute signal delay Earth-Mars, with conjunction check
 double CommsManager::computeSignalDelay(const EphemerisEntry mars_ephemeris_entry, const EphemerisEntry sun_ephemeris_entry) {
+    logMessage("INFO", "CommsManager::computeSignalDelay");
+
     if (isSolarConjunction(mars_ephemeris_entry, sun_ephemeris_entry)) {
         std::cout << "WARNING: Solar conjunction on " << mars_ephemeris_entry.date << " - No communication possible!\n";
+        logMessage("WARNING", "Solar conjunction - No communication possible!");
         return -1.0; // Signal blocked
     }
 
@@ -62,8 +69,11 @@ double CommsManager::computeSignalDelay(const EphemerisEntry mars_ephemeris_entr
 
 // UDP thread to send sensors data
 void CommsManager::delayedTransmitter(const std::string& ip, int port) {
+    logMessage("INFO", "CommsManager::delayedTransmitter");
+
     int sock = socket(AF_INET, SOCK_DGRAM, 0);
     if (sock < 0) {
+        logMessage("ERROR", "Socket creation failed");
         std::cerr << "Socket creation failed\n";
         return;
     }
@@ -82,17 +92,22 @@ void CommsManager::delayedTransmitter(const std::string& ip, int port) {
             auto now = std::chrono::steady_clock::now();
 
             if (now >= packet.sendTime) {
+                logMessage("INFO", "CommsManager::delayedTransmitter -> Sending sensorsDataQueue.pop()");
                 sensorsDataQueue.pop();
                 lock.unlock();
 
                 sendto(sock, packet.data.c_str(), packet.data.size(), 0, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
                 lock.lock();
+                logMessage("INFO", "CommsManager::delayedTransmitter -> Done Sending sensorsDataQueue.pop()");
+
             } else {
+                logMessage("INFO", "CommsManager::delayedTransmitter -> Wait untile signal delay is over (now >= packet.sendTime)");
                 queueCond.wait_until(lock, packet.sendTime);
             }
         }
     }
 
+    logMessage("INFO", "CommsManager::delayedTransmitter -> Close socket connection");
     close(sock);
 }
 
@@ -100,6 +115,8 @@ void CommsManager::delayedTransmitter(const std::string& ip, int port) {
 
 // Get the current time
 std::string CommsManager::getCurrentDate() {
+    logMessage("INFO", "CommsManager::getCurrentDate");
+
     std::time_t t = std::time(nullptr);
     std::tm* tm = std::localtime(&t);
 
