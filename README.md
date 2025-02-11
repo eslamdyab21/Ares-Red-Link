@@ -1,6 +1,6 @@
-# Ares-Red-Link
+# Mars-Earth communication Bottleneck 
 
-# Data Source 
+## Data Source 
 ![](images/astropixels_website.png)
 
 We use the ephemeris data available in the  `astropixels` website, this website has recorded historical data for planets in our solar system from 2011.
@@ -21,15 +21,11 @@ Inside the root directory of the project a python script `astro_ephemeris_data_p
 
 <br/>
 <br/>
-<br/>
 
-# Delayed Mars Rover Sensors Data Simulation
+# Mars-Earth Communication of Rover Sensors Data with Signal Delay in Real-Time
 Here we simulate sending data from Mars to Earth with the calculated light speed signal delay in real-time, the source sensors data frequency is each one second, and we send this data each one second too.
 
 If a delay is `120s`, data from `T=0s` is sent at `T=120s`, data from `T=1s` is sent at `T=121s`, and so on.
-
-
-<br/>
 
 ## Data Source 
 ![](images/mars_rover_sensors_data.png)
@@ -74,43 +70,13 @@ while (true) {
 
 It checks the queue **without blocking** and sends each packet at the exact **scheduled** time when a `queueCond.notify_one()` is called in the main flow.
 
-The main flow of Mars side:
-```cpp
-int main() {
-
-	EphemerisData EphemerisData;
-	CommsManager CommsManager;
-	Rover Rover;
-
-	// UDP thread transmitter	
-	std::thread transmitterThread(delayedTransmitter, &CommsManager,
-	                              "127.0.0.1", 8080);  
-	
-	// Get signal delay from ephemeris
-	.
-	.
-	.
-  
-	
-	double signal_delay = 0; // Delay in seconds	
-	signal_delay = CommsManager.computeSignalDelay(mars_ephemeris_data, sun_ephemeris_data);
-	
-	
-	// Sending sensors data each one second
-	std::string line;
-	std::string file_name = "source-data/roversensors/WE__0019___________CAL_ENG_________________P01.CSV";
-	
-	std::ifstream file(file_name);
-	
-	while (Rover.readSensorData(file, line) && signal_delay != -1) {
-		Rover.sendSensorData(line, signal_delay);;
-		queueCond.notify_one();
-		std::this_thread::sleep_for(std::chrono::seconds(1)); // Maintain real-time pacing
-	}
-
-}
-```
-
 
 ### Earth side
-We receive the sent sensors data by Mars, Earth side is the `server` side here and `Mars` is the `client` side in `UDP` terminology.
+In `earth_receiver_sim.cpp` We receive the sent sensors data by Mars, Earth side is the `server` side here and `Mars` is the `client` side in `UDP` terminology.
+
+
+### Test run
+
+
+If we look closely, we will find that the first pushed record to the queue is at `06:18:11` (Mars-side) and the first arrived record (Earth-side) is at `06:18:16` which is exactly after `5 seconds` (the signal delay), second record is sent at `06:18:12` and arrived at `06:18:17`, and so on......
+![](images/sim.png)
