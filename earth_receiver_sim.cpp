@@ -4,6 +4,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+#include "logger/logger.h"
+
 #define SERVER_PORT 8080
 #define BUFFER_SIZE 4096  
 
@@ -16,6 +18,7 @@ void earthReceiver() {
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockfd < 0) {
         std::cerr << "Socket creation failed\n";
+        logMessage("ERROR", "EarthReceiver -> Read line");
         return;
     }
 
@@ -25,19 +28,22 @@ void earthReceiver() {
 
     if (bind(sockfd, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
         std::cerr << "Binding failed\n";
+        logMessage("ERROR", "EarthReceiver -> Read line");
         return;
     }
 
-    std::cout << "Listening for incoming sensor data...\n";
+    logMessage("INFO", "EarthReceiver -> Listening for incoming sensor data...");
 
 
     while (true) {
         int valread = recvfrom(sockfd, buffer, BUFFER_SIZE, 0, (struct sockaddr*)&clientAddr, &addr_len);
         if (valread > 0) {
+            logMessage("INFO", "EarthReceiver -> Received a record...");
             std::cout << "Received Data:\n" << buffer;
         }
     }
 
+    logMessage("INFO", "EarthReceiver -> Close socket connection...");
     close(sockfd);
 }
 
