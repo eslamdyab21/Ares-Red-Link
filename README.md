@@ -1,4 +1,4 @@
-# Mars-Earth communication Bottleneck 
+# Mars-Earth Communication 
 
 ## Data Source 
 ![](images/astropixels_website.png)
