@@ -18,7 +18,6 @@ Inside the root directory of the project a python script `astro_ephemeris_data_p
 3. `year`, the year of which want to analyse
 ![](images/prepare_data.png)
 
-
 <br/>
 <br/>
 
