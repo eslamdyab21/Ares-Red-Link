@@ -35,8 +35,8 @@ This data from mars is taken from The Planetary Atmospheres Node (ATM) of the Pl
 
 ## Simulation
 Two essential components are used here:
-	1. `UDP` communication (simulating the Mars-Earth two ends)
-	2. `Multi-threading` in Mars side to account for the light speed signal delay in real-time data sending
+1. `UDP` communication (simulating the Mars-Earth two ends)
+2. `Multi-threading` in Mars side to account for the light speed signal delay in real-time data sending
 
 ### Mars side
 We send the rover sensors data here, we use the same two `EphemerisData` and `CommsManager` classes to calculate the light speed signal delay for the current day.
@@ -69,12 +69,17 @@ while (true) {
 
 It checks the queue **without blocking** and sends each packet at the exact **scheduled** time when a `queueCond.notify_one()` is called in the main flow.
 
+<br/>
+
 
 ### Earth side
 In `earth_receiver_sim.cpp` We receive the sent sensors data by Mars, Earth side is the `server` side here and `Mars` is the `client` side in `UDP` terminology.
 
+<br/>
 
 ### Test run
+[testrun.webm](https://github.com/user-attachments/assets/bdc7c88a-ac3f-4bec-a541-cc9a13a9df89)
+
 
 
 If we look closely, we will find that the first pushed record to the queue is at `06:18:11` (Mars-side) and the first arrived record (Earth-side) is at `06:18:16` which is exactly after `5 seconds` (the signal delay), second record is sent at `06:18:12` and arrived at `06:18:17`, and so on......
