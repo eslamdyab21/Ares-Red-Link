@@ -31,7 +31,7 @@ int main() {
     const EphemerisEntry mars_ephemeris_data = EphemerisData.getMarsEphemerisDataDate(mars_ephemeris_file, CommsManager.getCurrentDate());
     const EphemerisEntry sun_ephemeris_data  = EphemerisData.getSunEphemerisDataDate(sun_ephemeris_file, CommsManager.getCurrentDate());
 
-    double signal_delay = 0;  // Delay in seconds
+    double signal_delay = 5;  // Delay in seconds
     signal_delay = CommsManager.computeSignalDelay(mars_ephemeris_data, sun_ephemeris_data);
 
 
@@ -39,6 +39,7 @@ int main() {
     std::string line;
     std::string file_name = "source-data/rover-sensors/WE__0019___________CAL_ENG_________________P01.CSV";
     std::ifstream file(file_name);
+    std::getline(file, line); //skip header
 
     while (Rover.readSensorData(file, line) && signal_delay != -1) {
         Rover.sendSensorData(line, signal_delay);;
