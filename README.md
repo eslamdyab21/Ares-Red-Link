@@ -79,7 +79,7 @@ At the far right and left where Mars and the Sun orbits meets conjunction and op
 <br/>
 
 ## Test run
-`cpp` Link Flow -> 
+- `cpp` Link Flow -> 
 ```bash
 make clean
 make
@@ -87,11 +87,12 @@ make
 ```
 
 
-`python` Link Analysis -> 
+- `python` Link Analysis -> 
 ```bash
 python3 link_analysis.py
 ```
 
+[link_demo.webm](https://github.com/user-attachments/assets/9b6e9185-4ddd-48bb-b656-c9b30b5e842c)
 
 
 <br/>
