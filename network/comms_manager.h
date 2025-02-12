@@ -10,6 +10,7 @@ class CommsManager {
 public:
     double computeSignalDelay(const EphemerisEntry mars_ephemeris_entry, const EphemerisEntry sun_ephemeris_entry);
     void delayedTransmitter(const std::string& ip, int port);
+    std::array<double, 3> toCartesian(double ra, double dec);
     std::string getCurrentDate();
     
 private:

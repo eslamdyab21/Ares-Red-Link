@@ -16,9 +16,8 @@ constexpr double SPEED_OF_LIGHT = 299792.458; // km/s
 constexpr double AU_TO_KM = 149597870.7; // km
 
 // Function to convert RA/Dec to 3D Cartesian coordinates (unit vector)
-std::array<double, 3> toCartesian(double ra, double dec) {
+std::array<double, 3> CommsManager::toCartesian(double ra, double dec) {
     logMessage("INFO", "CommsManager::toCartesian");
-
     double ra_rad = ra * 15.0 * DEG_TO_RAD;  // Convert decimal hours to degrees, then to radians
     double dec_rad = dec * DEG_TO_RAD;       // Convert Dec to radians
 
