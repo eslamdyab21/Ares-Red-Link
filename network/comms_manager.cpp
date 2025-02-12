@@ -5,13 +5,14 @@
 #include <arpa/inet.h>
 #include <queue>
 #include <unistd.h>
+#include <limits>
 
 #include "comms_manager.h"
 #include "../logger/logger.h"
 
 
 constexpr double DEG_TO_RAD = M_PI / 180.0;
-constexpr double SOLAR_CONJUNCTION_ANGLE = 5.0; // Threshold in degrees
+constexpr double SOLAR_CONJUNCTION_ANGLE = 10.0; // Threshold in degrees
 constexpr double SPEED_OF_LIGHT = 299792.458; // km/s
 constexpr double AU_TO_KM = 149597870.7; // km
 
@@ -29,9 +30,8 @@ std::array<double, 3> CommsManager::toCartesian(double ra, double dec) {
 }
 
 
-// Check for conjunction
-bool CommsManager::isSolarConjunction(const EphemerisEntry mars_ephemeris_entry, const EphemerisEntry sun_ephemeris_entry) {
-    logMessage("INFO", "CommsManager::isSolarConjunction");
+double CommsManager::computeMarsSunAngle(EphemerisEntry mars_ephemeris_entry, EphemerisEntry sun_ephemeris_entry) {
+    logMessage("INFO", "CommsManager::calcMarsSunAngle");
 
     auto mars_vector = toCartesian(mars_ephemeris_entry.ra, mars_ephemeris_entry.declination);
     auto sun_vector = toCartesian(sun_ephemeris_entry.ra, sun_ephemeris_entry.declination);
@@ -45,19 +45,29 @@ bool CommsManager::isSolarConjunction(const EphemerisEntry mars_ephemeris_entry,
     double angle_rad = std::acos(dot_product);  // Angle in radians
     double angle_deg = angle_rad * (180.0 / M_PI); // Convert to degrees
 
-    return angle_deg < SOLAR_CONJUNCTION_ANGLE;
+    return angle_deg;
+}
+
+
+// Check for conjunction
+bool CommsManager::isSolarConjunction(EphemerisEntry mars_ephemeris_entry, EphemerisEntry sun_ephemeris_entry) {
+    logMessage("INFO", "CommsManager::isSolarConjunction");
+    double angle_deg = computeMarsSunAngle(mars_ephemeris_entry, sun_ephemeris_entry);
+
+
+    return angle_deg < SOLAR_CONJUNCTION_ANGLE || (180.0 - angle_deg) < SOLAR_CONJUNCTION_ANGLE;
 }
 
 
 
 // Compute signal delay Earth-Mars, with conjunction check
-double CommsManager::computeSignalDelay(const EphemerisEntry mars_ephemeris_entry, const EphemerisEntry sun_ephemeris_entry) {
+double CommsManager::computeSignalDelay(EphemerisEntry mars_ephemeris_entry, EphemerisEntry sun_ephemeris_entry) {
     logMessage("INFO", "CommsManager::computeSignalDelay");
 
     if (isSolarConjunction(mars_ephemeris_entry, sun_ephemeris_entry)) {
         std::cout << "WARNING: Solar conjunction on " << mars_ephemeris_entry.date << " - No communication possible!\n";
         logMessage("WARNING", "Solar conjunction - No communication possible!");
-        return -1.0; // Signal blocked
+        return std::numeric_limits<float>::infinity(); // Signal blocked
     }
 
     double distance_km = mars_ephemeris_entry.distance_au * AU_TO_KM; // Convert AU to km
