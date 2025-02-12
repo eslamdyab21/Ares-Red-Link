@@ -117,7 +117,7 @@ void EphemerisData::loadMarsEphemeris(const std::string& astro_object_filename) 
 }
 
 
-const std::vector<EphemerisEntry>& EphemerisData::getSunEphemerisData() const {
+std::vector<EphemerisEntry>& EphemerisData::getSunEphemerisData() {
     logMessage("INFO", "EphemerisData::getSunEphemerisData -> Start");
     logMessage("INFO", "EphemerisData::getSunEphemerisData -> Done");
 
@@ -125,7 +125,7 @@ const std::vector<EphemerisEntry>& EphemerisData::getSunEphemerisData() const {
 }
 
 
-const std::vector<EphemerisEntry>& EphemerisData::getMarsEphemerisData() const {
+std::vector<EphemerisEntry>& EphemerisData::getMarsEphemerisData() {
     logMessage("INFO", "EphemerisData::getMarsEphemerisData -> Start");
     logMessage("INFO", "EphemerisData::getMarsEphemerisData -> Done");
     
@@ -257,4 +257,12 @@ EphemerisEntry EphemerisData::getMarsEphemerisDataDate(const std::string& astro_
     logMessage("INFO", "EphemerisData::getMarsEphemerisDataDate -> No match entry.date == date");
     logMessage("INFO", "EphemerisData::getMarsEphemerisDataDate -> Done");
     return EphemerisEntry();
+}
+
+
+
+// Clear ephemeris_data vectors
+void EphemerisData::clearEphemerisData() {
+    mars_ephemeris_data.clear();
+    sun_ephemeris_data.clear();
 }
