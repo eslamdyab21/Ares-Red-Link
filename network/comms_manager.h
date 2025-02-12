@@ -8,14 +8,17 @@
 
 class CommsManager {
 public:
-    double computeSignalDelay(const EphemerisEntry mars_ephemeris_entry, const EphemerisEntry sun_ephemeris_entry);
+    double computeSignalDelay(EphemerisEntry mars_ephemeris_entry, EphemerisEntry sun_ephemeris_entry);
     void delayedTransmitter(const std::string& ip, int port);
+
     std::array<double, 3> toCartesian(double ra, double dec);
+    double computeMarsSunAngle(EphemerisEntry mars_ephemeris_entry, EphemerisEntry sun_ephemeris_entry);
+    
     std::string getCurrentDate();
     
 private:
     EphemerisData ephemeris;
-    bool isSolarConjunction(const EphemerisEntry mars_ephemeris_entry, const EphemerisEntry sun_ephemeris_entry);
+    bool isSolarConjunction(EphemerisEntry mars_ephemeris_entry, EphemerisEntry sun_ephemeris_entry);
 };
 
 #endif // COMMS_MANAGER_H
