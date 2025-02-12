@@ -23,13 +23,14 @@ int main() {
     
 
     std::string mars_ephemeris_file, sun_ephemeris_file;
-    std::string years[] = {"2020", "2021", "2022", "2023", "2024"};
+    std::string years[] = {"2020", "2021", "2022", "2023", "2024", "2025",
+                           "2026", "2027", "2028", "2029", "2030"};
 
     std::array<double, 3> mars_coordinates, sun_coordinates;
     double signal_delay, mars_sun_angle;
 
 
-    // Compute signal delay & coordinates for each record for each year
+    // Compute signal delay, coordinates & angle for each record for each year
     for (int i = 0; i < sizeof(years) / sizeof(years[0]); i++) {
         mars_ephemeris_file = std::string("source-data/mars") + years[i] + ".csv";
         sun_ephemeris_file  = std::string("source-data/sun") + years[i] + ".csv";
