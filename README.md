@@ -11,12 +11,13 @@
   - [Prepare Data](#Prepare-data)
   - [Link Flow](#Link-flow)
   - [Link Analysis](#Link-analysis)
+  - [Demo 1](#Demo-1)
 - [Mars-Earth Communication of Rover Sensors Data with Signal Delay in Real-Time](#Mars-earth-communication-of-rover-sensors-data-with-signal-delay-in-real-time)
   - [Data Source](#Data-Source)
   - [Simulation](#Simulation)
     - [Mars side](#Mars-side)
     - [Earth side](#Earth-side)
-    - [Test run](#Test-run)
+    - [Demo-2](#Demo-2)
   
 
 <br/>
@@ -105,7 +106,7 @@ At the far right and left where Mars and the Sun orbits meets conjunction and op
 
 <br/>
 
-## Test run
+## Demo 1
 - `cpp` Link Flow -> 
 ```bash
 make clean
@@ -185,7 +186,7 @@ In `earth_receiver_sim.cpp` We receive the sent sensors data by Mars, Earth side
 
 <br/>
 
-### Test run
+### Demo 2
 [testrun.webm](https://github.com/user-attachments/assets/bdc7c88a-ac3f-4bec-a541-cc9a13a9df89)
 
 
