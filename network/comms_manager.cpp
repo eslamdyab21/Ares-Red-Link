@@ -12,7 +12,7 @@
 
 
 constexpr double DEG_TO_RAD = M_PI / 180.0;
-constexpr double SOLAR_CONJUNCTION_ANGLE = 10.0; // Threshold in degrees
+constexpr double SOLAR_CONJUNCTION_ANGLE = 15.0; // Threshold in degrees
 constexpr double SPEED_OF_LIGHT = 299792.458; // km/s
 constexpr double AU_TO_KM = 149597870.7; // km
 
@@ -55,7 +55,7 @@ bool CommsManager::isSolarConjunction(EphemerisEntry mars_ephemeris_entry, Ephem
     double angle_deg = computeMarsSunAngle(mars_ephemeris_entry, sun_ephemeris_entry);
 
 
-    return angle_deg < SOLAR_CONJUNCTION_ANGLE || (180.0 - angle_deg) < SOLAR_CONJUNCTION_ANGLE;
+    return angle_deg < SOLAR_CONJUNCTION_ANGLE;
 }
 
 
