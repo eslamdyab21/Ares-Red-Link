@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 def link_line_plot(df):
     logging.info(f"""link_line_plot -> Generating mars_distance_signal_delay_angle_subplots""")
+
     # Handle inf values in plot
     df['Signal Delay'] = df['Signal Delay'].replace(np.inf, np.nan)
     max_value = df['Signal Delay'].max()
@@ -56,8 +57,41 @@ def link_line_plot(df):
     # Save the figure
     plt.savefig("link-analysis-plots/mars_distance_signal_delay_angle_subplots.png")
 
-    logging.info(f"""link_line_plot -> Saved link-analysis-plots/mars_distance_signal_delay_angle_subplots.png -> done""")
+    logging.info(f"""link_line_plot -> Saved link-analysis-plots/mars_distance_signal_delay_angle_subplots.png""")
 
+
+
+def mars_sun_coordinates_plot(df):
+    logging.info(f"""mars_sun_coordinates_plot -> Generating mars_sun_coordinates 3d plot""")
+
+    df[['Mars_x', 'Mars_y', 'Mars_z']] = df['Mars Coordinates'].str.split(',', expand=True).astype(float)
+    df[['Sun_x', 'Sun_y', 'Sun_z']] = df['Sun Coordinates'].str.split(',', expand=True).astype(float)
+
+
+    # Create a 3D scatter plot
+    fig = plt.figure(figsize=(16, 8))
+    ax = fig.add_subplot(111, projection='3d')
+
+
+    # Plot Mars coordinates
+    ax.scatter(df['Mars_x'], df['Mars_y'], df['Mars_z'], color='red', label='Mars')
+
+
+    # Plot Sun coordinates
+    ax.scatter(df['Sun_x'], df['Sun_y'], df['Sun_z'], color='yellow', label='Sun')
+
+
+    # Set labels and title
+    ax.set_xlabel('X Coordinate')
+    ax.set_ylabel('Y Coordinate')
+    ax.set_zlabel('Z Coordinate')
+    ax.set_title('Mars and Sun Coordinates Over Time')
+    ax.legend()
+
+
+    plt.savefig("link-analysis-plots/mars_sun_coordinates.png")
+
+    logging.info(f"""mars_sun_coordinates_plot -> Saved link-analysis-plots/mars_sun_coordinates.png""")
 
 
 
@@ -68,3 +102,4 @@ if __name__ == "__main__":
     df = pd.read_csv("link_data.csv", sep=";")
 
     link_line_plot(df)
+    mars_sun_coordinates_plot(df)
