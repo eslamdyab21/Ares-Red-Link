@@ -148,8 +148,8 @@ This data from mars is taken from The Planetary Atmospheres Node (ATM) of the Pl
 
 ## Simulation
 Two essential components are used here:
-6. `UDP` communication (simulating the Mars-Earth two ends)
-7. `Multi-threading` in Mars side to account for the light speed signal delay in real-time data sending
+1. `UDP` communication (simulating the Mars-Earth two ends)
+2. `Multi-threading` in Mars side to account for the light speed signal delay in real-time data sending
 
 <br/>
 
