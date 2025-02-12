@@ -40,6 +40,9 @@ Inside the root directory of the project a python script `astro_ephemeris_data_p
 2. `astro_object_name`: can be sun, mars, earth, .....
 3. `year`, the year of which want to analyse
 ![](images/prepare_data.png)
+
+<br/>
+
 ## Link Flow
 The link flow is developed purely in `cpp` with a number of classes for scalability and readability.
 For each year we do the following:
@@ -73,6 +76,23 @@ We can also deduce the solar conjunction from the 3D cartesian coordinates plot
 ![](link-analysis-plots/mars_sun_coordinates_croped.png)
 At the far right and left where Mars and the Sun orbits meets conjunction and opposition happens, and those two link with the above third subplot.
 
+<br/>
+
+## Test run
+`cpp` Link Flow -> 
+```bash
+make clean
+make
+./signal_delay
+```
+
+
+`python` Link Analysis -> 
+```bash
+python3 link_analysis.py
+```
+
+
 
 <br/>
 <br/>
@@ -81,6 +101,8 @@ At the far right and left where Mars and the Sun orbits meets conjunction and op
 In this part we simulate sending data from Mars to Earth with the calculated light speed signal delay in real-time, the source sensors data frequency is each one second, and we send this data each one second too.
 
 If a delay is `120s`, data from `T=0s` is sent at `T=120s`, data from `T=1s` is sent at `T=121s`, and so on.
+
+<br/>
 
 ## Data Source 
 ![](images/mars_rover_sensors_data.png)
