@@ -42,7 +42,7 @@ void EphemerisData::loadSunEphemeris(const std::string& astro_object_filename) {
         std::getline(iss, temp, ' '); ra_m = std::stod(temp);
         std::getline(iss, temp, ','); ra_s = std::stod(temp);
         // Convert RA to decimal hours
-        std::getline(iss, temp, ','); entry.ra = ra_h + (ra_m / 60.0) + (ra_s / 3600.0);
+        entry.ra = ra_h + (ra_m / 60.0) + (ra_s / 3600.0);
 
 
         // Read Apparent Declination (±DD:MM.M)
@@ -172,7 +172,7 @@ EphemerisEntry EphemerisData::getSunEphemerisDataDate(const std::string& astro_o
         std::getline(iss, temp, ' '); ra_m = std::stod(temp);
         std::getline(iss, temp, ','); ra_s = std::stod(temp);
         // Convert RA to decimal hours
-        std::getline(iss, temp, ','); entry.ra = ra_h + (ra_m / 60.0) + (ra_s / 3600.0);
+        entry.ra = ra_h + (ra_m / 60.0) + (ra_s / 3600.0);
 
 
         // Read Apparent Declination (±DD:MM.M)
