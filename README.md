@@ -1,9 +1,29 @@
 ![](images/astropixels_website.png)
 
 
+<br/>
+
+# Table of Contents
+
+- [Mars-Earth Link Analysis](#Mars-earth-link-analysis)
+  - [Data Source](#Data-source)
+  - [Prepare Data](#Prepare-data)
+  - [Link Flow](#Link-flow)
+  - [Link Analysis](#Link-analysis)
+- [Mars-Earth Communication of Rover Sensors Data with Signal Delay in Real-Time](#Mars-earth-communication-of-rover-sensors-data-with-signal-delay-in-real-time)
+  - [Data Source](#Data-Source)
+  - [Simulation](#Simulation)
+    - [Mars side](#Mars-side)
+    - [Earth side](#Earth-side)
+    - [Test run](#Test-run)
+  
+
+<br/>
+
 # Mars-Earth Link Analysis
 In this part we investigate Mars-Earth communication link stability with respect to their relative distance with time and their coordinates with the Sun. 
 
+<br/>
 
 ## Data Source 
 We use the ephemeris data available in the  `astropixels`, it has recorded historical data for planets in our solar system from 2011.
@@ -30,14 +50,15 @@ For each year we do the following:
 		3. Compute light speed signal delay with `CommsManager.computeSignalDelay()`
 		4. Log those records with few others to `link_data.csv` for analysis
 
+<br/>
 
 ## Link Analysis
 Using the logged `link_data.csv` from previous step and `link_analysis.py` python script we can now perform some analysis to answer the questions like:
-1. What's the minimum and maximum signal delay values ?
-2. How the signal delay varies with time ?
-3. When best to communicate with Mars ?
-4. How often do we lose communication and solar conjunction happens ?
-5. How Mars-Sun location with respect to Earth affects conjunction ?
+1. What's the minimum and maximum signal delay values?
+2. How the signal delay varies with time?
+3. When best to communicate with Mars?
+4. How often do we lose communication and solar conjunction happens?
+5. How Mars-Sun location with respect to Earth affects conjunction?
 
 ![](link-analysis-plots/mars_distance_signal_delay_angle_subplots.png)
 We can see that the `signal delay` *-first plot-* varies linearly with `distance` *-second plot-* due to the fact that their relation is `t=c/d` and `c` is constant, so when the distance between mars and earth is small, minimum delay and when the distance is big, maximum delay.
@@ -45,6 +66,7 @@ We can see that the `signal delay` *-first plot-* varies linearly with `distance
 The two graphs are linear except for some places where the signal delay is very high, this is when `solar conjunction` happens *-the sun is between earth and mars blocking the signal-*, and we can confirm that with the third plot `Mars-Sun-Angle`
 - **close to 0 degrees**: The Sun is between Earth and Mars (conjunction).
 - **close to 180 degrees**: Mars is between Earth and the Sun (opposition).
+
 It happens roughly every two years duo to the fact that Mars takes almost twice the time the Earth takes to make one orbit around the sun, and conjunction lasts for periods roughly two weeks.
 
 We can also deduce the solar conjunction from the 3D cartesian coordinates plot
@@ -71,6 +93,8 @@ This data from mars is taken from The Planetary Atmospheres Node (ATM) of the Pl
 Two essential components are used here:
 6. `UDP` communication (simulating the Mars-Earth two ends)
 7. `Multi-threading` in Mars side to account for the light speed signal delay in real-time data sending
+
+<br/>
 
 ### Mars side
 We send the rover sensors data here, we use the same two `EphemerisData` and `CommsManager` classes to calculate the light speed signal delay for the current day.
