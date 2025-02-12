@@ -18,11 +18,14 @@ class EphemerisData {
 public:
     void loadSunEphemeris(const std::string& astro_object_ephemeris);
     void loadMarsEphemeris(const std::string& astro_object_ephemeris);
-    const std::vector<EphemerisEntry>& getSunEphemerisData() const;
-    const std::vector<EphemerisEntry>& getMarsEphemerisData() const;
+
+    std::vector<EphemerisEntry>& getSunEphemerisData();
+    std::vector<EphemerisEntry>& getMarsEphemerisData();
+
     EphemerisEntry getSunEphemerisDataDate(const std::string& astro_object_filename, std::string date);
     EphemerisEntry getMarsEphemerisDataDate(const std::string& astro_object_filename, std::string date);
 
+    void clearEphemerisData();
 
 private:
     std::vector<EphemerisEntry> sun_ephemeris_data;
