@@ -1,10 +1,15 @@
 ![](images/astropixels_website.png)
 
+# Introduction
+Ares-Red-Link is a **high-performance computing (HPC) software** designed to simulate **interplanetary communication between Mars and Earth**, focusing on signal delay due to planetary motion and solar conjunctions. The project integrates **multithreaded C++ networking**, **mutex-controlled data synchronization**, **automated build** using **Makefiles** optimizing compilation and dependency management, and **efficient event-driven transmission** to handle real-time sensor data from a simulated Mars rover.
+
+On the **data engineering** side, the system processes large-scale **ephemeris datasets**, optimizing storage and retrieval to compute planetary positions and light-speed communication delays efficiently with **C++**. It supports a **structured ETL data pipeline**, ingesting ephemeris data, computing delays and transmitting packets with realistic time offsets.
+
+From a **data analysis perspective**, Ares-Red-Link utilizes Python for **visualizing planetary motion, signal delay variations, and communication disruptions**. The project derives insights into **solar conjunction events**, analyzing when and how communication blackouts occur due to the Sun obstructing Mars-Earth signals. By studying **historical and simulated planetary ephemeris data**, the system aids in optimizing **deep-space network scheduling and mission planning** for future Mars missions.
 
 <br/>
 
 # Table of Contents
-
 - [Project Structure](#Project-structure)
 - [Mars-Earth Link Analysis](#Mars-earth-link-analysis)
   - [Data Source](#Data-source)
@@ -21,6 +26,7 @@
   
 
 <br/>
+
 
 # Project Structure
 
