@@ -14,7 +14,7 @@ int main() {
     CommsManager CommsManager;
 
     // Write output file headers
-    std::ofstream outputFile("communication_data.csv");
+    std::ofstream outputFile("link_data.csv");
     if (outputFile.is_open()) {
         outputFile  << "Date" << ";" << "RA" << ";" << "Dec" << ";" <<"Mars Coordinates"
                     << ";" << "Sun Coordinates" << ";" << "Distance" << ";" << "Signal Delay" << std::endl;                       
