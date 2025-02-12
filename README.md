@@ -25,7 +25,6 @@
 
 ```
 -------------------source code-------------------
-|____/Ares-Red-Link                   
 | |____README.md                      # Github README for documentaion
 
 | |____ephemeris/ephemeris_data.h
