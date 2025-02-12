@@ -17,7 +17,7 @@
   - [Simulation](#Simulation)
     - [Mars side](#Mars-side)
     - [Earth side](#Earth-side)
-    - [Demo-2](#Demo-2)
+    - [Demo 2](#Demo-2)
   
 
 <br/>
