@@ -5,6 +5,7 @@
 
 # Table of Contents
 
+- [Project Structure](#Project-structure)
 - [Mars-Earth Link Analysis](#Mars-earth-link-analysis)
   - [Data Source](#Data-source)
   - [Prepare Data](#Prepare-data)
@@ -17,6 +18,33 @@
     - [Earth side](#Earth-side)
     - [Test run](#Test-run)
   
+
+<br/>
+
+# Project Structure
+
+```
+-------------------source code-------------------
+|____/Ares-Red-Link                   
+| |____README.md                      # Github README for documentaion
+
+| |____ephemeris/ephemeris_data.h
+| |____ephemeris/ephemeris_data.cpp   # handling ephemeris loading & manipulation
+| |____network/comms_manager.h
+| |____network/comms_manager.cpp      # handling earth-mars link communication signal delay and real-time
+| |____mars-rover/rover.h
+| |____mars-rover/rover.cpp           # handling rover sensors data
+| |____logger/logger.h
+| |____logger/logger.cpp              # logging for other modules
+
+| |____main.cpp                       # 1st part mars-earth link flow
+| |____astro_ephemeris_data_parser.py # 1st part ephemeris data scraper
+| |____link_analysis.py               # 1st part mars-earth link analysis
+
+| |____mars_rover_sim.cpp             # 2nd part sensors data thread udp client
+| |____earth_receiver_sim.cpp         # 2nd part sensors data udp server
+```
+
 
 <br/>
 
