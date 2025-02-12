@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include <fstream>
+
+
 #include "ephemeris/ephemeris_data.h"
 #include "network/comms_manager.h"
 
@@ -9,6 +12,14 @@
 int main() {
     EphemerisData EphemerisData;
     CommsManager CommsManager;
+
+    // Write output file headers
+    std::ofstream outputFile("communication_data.csv");
+    if (outputFile.is_open()) {
+        outputFile  << "Date" << ";" << "RA" << ";" << "Dec" << ";" <<"Mars Coordinates"
+                    << ";" << "Sun Coordinates" << ";" << "Distance" << ";" << "Signal Delay" << std::endl;                       
+    }
+    
 
     std::string mars_ephemeris_file, sun_ephemeris_file;
     std::string years[] = {"2020", "2021"};
@@ -34,6 +45,18 @@ int main() {
             sun_coordinates  = CommsManager.toCartesian(sun_ephemeris_data[j].ra, sun_ephemeris_data[j].declination);
             signal_delay = CommsManager.computeSignalDelay(mars_ephemeris_data[j], sun_ephemeris_data[j]);
 
+            
+            if (outputFile.is_open()) {
+                outputFile  << mars_ephemeris_data[j].date << ", " << years[i]
+                            << ";" << mars_ephemeris_data[j].ra
+                            << ";" << mars_ephemeris_data[j].declination
+                            << ";" << mars_coordinates[0] << "," << mars_coordinates[1] << "," << mars_coordinates[2]
+                            << ";" << sun_coordinates[0] << "," << sun_coordinates[1] << "," << sun_coordinates[2]
+                            << ";" << mars_ephemeris_data[j].distance_au
+                            << ";" << signal_delay << std::endl;
+            }
+
+
             std::cout << "Date: " << mars_ephemeris_data[j].date << ", " << years[i]
                     << "; RA: " << mars_ephemeris_data[j].ra
                     << "; Dec: " << mars_ephemeris_data[j].declination
@@ -47,6 +70,6 @@ int main() {
     }
 
 
-
+    outputFile.close();
     return 0;
 }
