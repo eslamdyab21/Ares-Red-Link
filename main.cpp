@@ -94,7 +94,8 @@ int main() {
                     << "; Sun Coordinates: " << sun_coordinates[0] << "," << sun_coordinates[1] << "," << sun_coordinates[2]
                     << "; Distance (AU): " << (*mars_ephemeris_data)[j].distance_au   
                     << "; Angle: " << mars_sun_angle  
-                    << "; Signal Delay: " << signal_delay << std::endl;   
+                    << "; Signal Delay: " << signal_delay << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(20));   
         }
 
         EphemerisData.clearEphemerisData();

@@ -12,7 +12,7 @@ void logMessage(const std::string level, const std::string message) {
     
     
     
-    std::cout << logEntry << std::endl;
+    // std::cout << logEntry << std::endl;
     
     // Write to log file
     if (logFile.is_open()) {
