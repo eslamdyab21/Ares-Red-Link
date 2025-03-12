@@ -140,15 +140,18 @@ void CommsManager::UDPTransmitter(const std::string& ip, int port) {
 
     while (runningUDPThread) {
         std::unique_lock<std::mutex> lock(queueMutexUDP);
-        queueCondUDP.wait(lock, [this] { return !queueUDP.empty(); });
+        queueCondUDP.wait(lock, [this] { return !queueUDP.empty() || !runningUDPThread; });
 
-        std::string packet = queueUDP.front();
+        logMessage("INFO", "CommsManager::UDPTransmitter -> Sending queueUDP.pop()");
 
-        queueUDP.pop();
-        lock.unlock();
-
-        sendto(sock, packet.c_str(), packet.size(), 0, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
-        logMessage("INFO", "CommsManager::UDPTransmitter -> Done Sending queueUDP.pop()");
+        if (!queueUDP.empty()) {
+            std::string packet = queueUDP.front();
+            queueUDP.pop();
+            lock.unlock();
+            
+            sendto(sock, packet.c_str(), packet.size(), 0, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+            logMessage("INFO", "CommsManager::UDPTransmitter -> Done Sending queueUDP.pop()");
+        }
         
     }
 
