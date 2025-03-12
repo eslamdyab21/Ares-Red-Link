@@ -1,14 +1,7 @@
-<<<<<<< HEAD
-![](images/astropixels_website.png)
-
-# Introduction
-Ares-Red-Link is a **high-performance computing (HPC) software** designed to simulate **interplanetary communication between Mars and Earth**, focusing on signal delay due to planetary motion and solar conjunctions. The project integrates **multithreaded C++ networking**, **mutex-controlled data synchronization**, **automated build** using **Makefiles** optimizing compilation and dependency management, and **efficient event-driven transmission** to handle real-time sensor data from a simulated Mars rover.
-=======
 ![](images/sim_gif.gif)
 
 # Introduction
 Ares-Red-Link is a **high-performance software** designed to simulate **interplanetary communication between Mars and Earth**, focusing on signal delay due to planetary motion and solar conjunctions. The project integrates **multithreaded C++ networking**, **mutex-controlled data synchronization**, **automated build** using **Makefiles** optimizing compilation and dependency management, and **efficient event-driven transmission** to handle real-time sensor data from a simulated Mars rover.
->>>>>>> dev
 
 On the **data engineering** side, the system processes large-scale **ephemeris datasets**, optimizing storage and retrieval to compute planetary positions and light-speed communication delays efficiently with **C++**. It supports a **structured ETL data pipeline**, ingesting ephemeris data, computing delays and transmitting packets with realistic time offsets.
 
@@ -53,10 +46,7 @@ From a **data analysis perspective**, Ares-Red-Link utilizes Python for **visual
 | |____main.cpp                       # 1st part mars-earth link flow
 | |____astro_ephemeris_data_parser.py # 1st part ephemeris data scraper
 | |____link_analysis.py               # 1st part mars-earth link analysis
-<<<<<<< HEAD
-=======
 | |____link_analysis_sim.py           # 1st part mars-earth real-time link analysis
->>>>>>> dev
 
 | |____mars_rover_sim.cpp             # 2nd part sensors data thread udp client
 | |____earth_receiver_sim.cpp         # 2nd part sensors data udp server
@@ -71,11 +61,8 @@ In this part we investigate Mars-Earth communication link stability with respect
 <br/>
 
 ## Data Source 
-<<<<<<< HEAD
-=======
 ![](images/astropixels_website.png)
 
->>>>>>> dev
 We use the ephemeris data available in the  `astropixels`, it has recorded historical data for planets in our solar system from 2011.
 
 A _geocentric ephemeris_ is a table that gives the celestial coordinates of an astronomical object over a range of times as **seen from Earth's center**.
