@@ -122,6 +122,63 @@ void CommsManager::delayedTransmitter(const std::string& ip, int port) {
 
 
 
+// UDP thread to send data
+void CommsManager::UDPTransmitter(const std::string& ip, int port) {
+    logMessage("INFO", "CommsManager::UDPTransmitter");
+
+    int sock = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sock < 0) {
+        logMessage("ERROR", "Socket creation failed");
+        std::cerr << "Socket creation failed\n";
+        return;
+    }
+
+    sockaddr_in serverAddr{};
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(port);
+    inet_pton(AF_INET, ip.c_str(), &serverAddr.sin_addr);
+
+    while (runningUDPThread) {
+        std::unique_lock<std::mutex> lock(queueMutexUDP);
+        queueCondUDP.wait(lock, [this] { return !queueUDP.empty(); });
+
+        std::string packet = queueUDP.front();
+
+        queueUDP.pop();
+        lock.unlock();
+
+        sendto(sock, packet.c_str(), packet.size(), 0, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+        logMessage("INFO", "CommsManager::UDPTransmitter -> Done Sending queueUDP.pop()");
+        
+    }
+
+    logMessage("INFO", "CommsManager::UDPTransmitter -> Close socket connection");
+    close(sock);
+}
+
+
+
+// Method to add data to the queueUDP
+void CommsManager::addToQueue(const std::string& data) {
+    logMessage("INFO", "CommsManager::addToQueue -> Sending queueUDP.push()");
+
+    {
+        std::lock_guard<std::mutex> lock(queueMutexUDP);
+        queueUDP.push(data);    
+    }
+
+    queueCondUDP.notify_one();
+    logMessage("INFO", "CommsManager::addToQueue -> Done Sending queueUDP.push()");
+}
+
+
+// Method to stop UDP thread
+void CommsManager::stopUDPThread() {
+    runningUDPThread = false;
+    queueCondUDP.notify_one();
+}
+
+
 // Get the current time
 std::string CommsManager::getCurrentDate() {
     logMessage("INFO", "CommsManager::getCurrentDate");
