@@ -2,6 +2,7 @@
 #include <vector>
 #include <array>
 #include <fstream>
+#include <thread>
 
 
 #include "ephemeris/ephemeris_data.h"
@@ -25,10 +26,19 @@ void saveCSV(std::ofstream* outputFile, EphemerisEntry mars_ephemeris_data, doub
 }
 
 
+void udpThread(CommsManager *CommsManager, const std::string& ip, int port) {
+    CommsManager->UDPTransmitter(ip, port);
+}
+
+
 
 int main() {
     EphemerisData EphemerisData;
     CommsManager CommsManager;
+
+    // UDPThread
+    std::thread transmitterThread(udpThread, &CommsManager, "127.0.0.1", 12345);
+
 
     // Write output file headers
     std::ofstream outputFile("link_data.csv");
@@ -45,6 +55,7 @@ int main() {
 
     std::array<double, 3> mars_coordinates, sun_coordinates;
     double signal_delay, mars_sun_angle;
+    std::ostringstream udp_packet;
 
 
     // Compute signal delay, coordinates & angle for each record for each year
@@ -69,6 +80,19 @@ int main() {
             
             saveCSV(&outputFile, (*mars_ephemeris_data)[j], signal_delay, mars_sun_angle, mars_coordinates, sun_coordinates, years[i]);
 
+            // Single CSV-formatted string for UDP thread
+            udp_packet.str("");
+            udp_packet << (*mars_ephemeris_data)[j].date << ";" << years[i] << ";"
+                    << (*mars_ephemeris_data)[j].ra << ";"
+                    << (*mars_ephemeris_data)[j].declination << ";"
+                    << mars_coordinates[0] << "," << mars_coordinates[1] << "," << mars_coordinates[2] << ";"
+                    << sun_coordinates[0] << "," << sun_coordinates[1] << "," << sun_coordinates[2] << ";"
+                    << (*mars_ephemeris_data)[j].distance_au << ";"
+                    << mars_sun_angle << ";"
+                    << signal_delay;
+
+            CommsManager.addToQueue(udp_packet.str());
+
 
             std::cout << "Date: " << (*mars_ephemeris_data)[j].date << ", " << years[i]
                     << "; RA: " << (*mars_ephemeris_data)[j].ra
@@ -85,5 +109,8 @@ int main() {
 
 
     outputFile.close();
+    CommsManager.stopUDPThread();
+    transmitterThread.join();
+
     return 0;
 }
