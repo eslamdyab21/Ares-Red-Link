@@ -19,8 +19,8 @@ public:
     void loadSunEphemeris(const std::string& astro_object_ephemeris);
     void loadMarsEphemeris(const std::string& astro_object_ephemeris);
 
-    std::vector<EphemerisEntry>& getSunEphemerisData();
-    std::vector<EphemerisEntry>& getMarsEphemerisData();
+    std::vector<EphemerisEntry>* getSunEphemerisData();
+    std::vector<EphemerisEntry>* getMarsEphemerisData();
 
     EphemerisEntry getSunEphemerisDataDate(const std::string& astro_object_filename, std::string date);
     EphemerisEntry getMarsEphemerisDataDate(const std::string& astro_object_filename, std::string date);

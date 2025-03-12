@@ -117,19 +117,19 @@ void EphemerisData::loadMarsEphemeris(const std::string& astro_object_filename) 
 }
 
 
-std::vector<EphemerisEntry>& EphemerisData::getSunEphemerisData() {
+std::vector<EphemerisEntry>* EphemerisData::getSunEphemerisData() {
     logMessage("INFO", "EphemerisData::getSunEphemerisData -> Start");
     logMessage("INFO", "EphemerisData::getSunEphemerisData -> Done");
 
-    return sun_ephemeris_data;
+    return &sun_ephemeris_data;
 }
 
 
-std::vector<EphemerisEntry>& EphemerisData::getMarsEphemerisData() {
+std::vector<EphemerisEntry>* EphemerisData::getMarsEphemerisData() {
     logMessage("INFO", "EphemerisData::getMarsEphemerisData -> Start");
     logMessage("INFO", "EphemerisData::getMarsEphemerisData -> Done");
     
-    return mars_ephemeris_data;
+    return &mars_ephemeris_data;
 }
 
 
