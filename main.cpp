@@ -9,6 +9,8 @@
 
 
 
+// void saveCSV()
+
 int main() {
     EphemerisData EphemerisData;
     CommsManager CommsManager;
@@ -36,38 +38,38 @@ int main() {
         sun_ephemeris_file  = std::string("source-data/sun") + years[i] + ".csv";
 
         EphemerisData.loadMarsEphemeris(mars_ephemeris_file);
-        std::vector<EphemerisEntry>& mars_ephemeris_data = EphemerisData.getMarsEphemerisData();
+        std::vector<EphemerisEntry>* mars_ephemeris_data = EphemerisData.getMarsEphemerisData();
 
         EphemerisData.loadSunEphemeris(sun_ephemeris_file);
-        std::vector<EphemerisEntry>& sun_ephemeris_data = EphemerisData.getSunEphemerisData();
+        std::vector<EphemerisEntry>* sun_ephemeris_data = EphemerisData.getSunEphemerisData();
 
 
-        for (int j = 0; j < mars_ephemeris_data.size(); j++) {
-            mars_coordinates = CommsManager.toCartesian(mars_ephemeris_data[j].ra, mars_ephemeris_data[j].declination);
-            sun_coordinates  = CommsManager.toCartesian(sun_ephemeris_data[j].ra, sun_ephemeris_data[j].declination);
+        for (int j = 0; j < mars_ephemeris_data->size(); j++) {
+            mars_coordinates = CommsManager.toCartesian((*mars_ephemeris_data)[j].ra, (*mars_ephemeris_data)[j].declination);
+            sun_coordinates  = CommsManager.toCartesian((*sun_ephemeris_data)[j].ra, (*sun_ephemeris_data)[j].declination);
             
-            mars_sun_angle = CommsManager.computeMarsSunAngle(mars_ephemeris_data[j], sun_ephemeris_data[j]);
-            signal_delay = CommsManager.computeSignalDelay(mars_ephemeris_data[j], sun_ephemeris_data[j]);
+            mars_sun_angle = CommsManager.computeMarsSunAngle((*mars_ephemeris_data)[j], (*sun_ephemeris_data)[j]);
+            signal_delay = CommsManager.computeSignalDelay((*mars_ephemeris_data)[j], (*sun_ephemeris_data)[j]);
 
             
             if (outputFile.is_open()) {
-                outputFile  << mars_ephemeris_data[j].date << ", " << years[i]
-                            << ";" << mars_ephemeris_data[j].ra
-                            << ";" << mars_ephemeris_data[j].declination
+                outputFile  << (*mars_ephemeris_data)[j].date << ", " << years[i]
+                            << ";" << (*mars_ephemeris_data)[j].ra
+                            << ";" << (*mars_ephemeris_data)[j].declination
                             << ";" << mars_coordinates[0] << "," << mars_coordinates[1] << "," << mars_coordinates[2]
                             << ";" << sun_coordinates[0] << "," << sun_coordinates[1] << "," << sun_coordinates[2]
-                            << ";" << mars_ephemeris_data[j].distance_au
+                            << ";" << (*mars_ephemeris_data)[j].distance_au
                             << ";" << mars_sun_angle
                             << ";" << signal_delay << std::endl;
             }
 
 
-            std::cout << "Date: " << mars_ephemeris_data[j].date << ", " << years[i]
-                    << "; RA: " << mars_ephemeris_data[j].ra
-                    << "; Dec: " << mars_ephemeris_data[j].declination
+            std::cout << "Date: " << (*mars_ephemeris_data)[j].date << ", " << years[i]
+                    << "; RA: " << (*mars_ephemeris_data)[j].ra
+                    << "; Dec: " << (*mars_ephemeris_data)[j].declination
                     << "; Mars Coordinates: " << mars_coordinates[0] << "," << mars_coordinates[1] << "," << mars_coordinates[2]
                     << "; Sun Coordinates: " << sun_coordinates[0] << "," << sun_coordinates[1] << "," << sun_coordinates[2]
-                    << "; Distance (AU): " << mars_ephemeris_data[j].distance_au   
+                    << "; Distance (AU): " << (*mars_ephemeris_data)[j].distance_au   
                     << "; Angle: " << mars_sun_angle  
                     << "; Signal Delay: " << signal_delay << std::endl;   
         }
