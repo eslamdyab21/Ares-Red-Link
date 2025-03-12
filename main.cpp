@@ -9,7 +9,22 @@
 
 
 
-// void saveCSV()
+void saveCSV(std::ofstream* outputFile, EphemerisEntry mars_ephemeris_data, double signal_delay, double mars_sun_angle, 
+            std::array<double, 3> mars_coordinates, std::array<double, 3> sun_coordinates, std::string year) {
+
+    if (outputFile->is_open()) {
+        *outputFile << mars_ephemeris_data.date << ", " << year
+                    << ";" << mars_ephemeris_data.ra
+                    << ";" << mars_ephemeris_data.declination
+                    << ";" << mars_coordinates[0] << "," << mars_coordinates[1] << "," << mars_coordinates[2]
+                    << ";" << sun_coordinates[0] << "," << sun_coordinates[1] << "," << sun_coordinates[2]
+                    << ";" << mars_ephemeris_data.distance_au
+                    << ";" << mars_sun_angle
+                    << ";" << signal_delay << std::endl;
+    }
+}
+
+
 
 int main() {
     EphemerisData EphemerisData;
@@ -52,16 +67,7 @@ int main() {
             signal_delay = CommsManager.computeSignalDelay((*mars_ephemeris_data)[j], (*sun_ephemeris_data)[j]);
 
             
-            if (outputFile.is_open()) {
-                outputFile  << (*mars_ephemeris_data)[j].date << ", " << years[i]
-                            << ";" << (*mars_ephemeris_data)[j].ra
-                            << ";" << (*mars_ephemeris_data)[j].declination
-                            << ";" << mars_coordinates[0] << "," << mars_coordinates[1] << "," << mars_coordinates[2]
-                            << ";" << sun_coordinates[0] << "," << sun_coordinates[1] << "," << sun_coordinates[2]
-                            << ";" << (*mars_ephemeris_data)[j].distance_au
-                            << ";" << mars_sun_angle
-                            << ";" << signal_delay << std::endl;
-            }
+            saveCSV(&outputFile, (*mars_ephemeris_data)[j], signal_delay, mars_sun_angle, mars_coordinates, sun_coordinates, years[i]);
 
 
             std::cout << "Date: " << (*mars_ephemeris_data)[j].date << ", " << years[i]
